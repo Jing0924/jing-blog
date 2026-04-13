@@ -1,0 +1,50 @@
+---
+alwaysApply: false
+---
+
+# Commit 訊息規範
+
+## 格式
+使用 **Conventional Commits** 格式：
+
+```
+<類型>(<範疇>): <主旨>
+
+[選填 body]
+
+[選填 footer]
+```
+
+## 類型
+| 類型 | 使用時機 |
+|------|---------|
+| `feat` | 新增功能 |
+| `fix` | 修正 Bug |
+| `style` | UI / 樣式調整（不涉及邏輯變更） |
+| `refactor` | 程式碼重構（不新增功能、不修 Bug） |
+| `docs` | 文件更新 |
+| `chore` | 雜項（設定檔、依賴套件等） |
+| `perf` | 效能優化 |
+| `test` | 測試相關變更 |
+
+## 範疇（本專案適用）
+- `blog` - 部落格文章相關
+- `ui` - 元件 / 頁面
+- `config` - 設定檔
+- `seo` - SEO 相關
+- `api` - API 路由
+- `auth` - 身份驗證相關
+
+## 規則
+- `<主旨>` 必須以**英文**撰寫，以動詞開頭，全小寫，結尾不加句點
+- 每個 commit 只做**一件事**
+- body 用來說明**為什麼**這樣改，而非描述改了什麼
+
+## 範例
+```
+feat(blog): add markdown rendering with syntax highlight
+fix(ui): correct mobile navbar overflow issue
+style(ui): update hero section layout for tablet breakpoint
+chore(config): add vercel deployment config
+docs: update README with setup instructions
+```
