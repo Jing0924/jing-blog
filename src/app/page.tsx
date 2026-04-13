@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAllDrafts } from "@/lib/posts";
 
+
 export default function Home() {
   const recentDrafts = getAllDrafts().slice(0, 5);
 

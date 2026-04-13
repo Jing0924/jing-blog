@@ -1,4 +1,5 @@
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import Link from 'next/link'
 import { getDraft, getAllDrafts } from '@/lib/posts'
@@ -41,7 +42,7 @@ export default async function DraftPage({
         )}
       </div>
       <article className="prose prose-zinc dark:prose-invert max-w-none">
-        <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
           {content}
         </ReactMarkdown>
       </article>
