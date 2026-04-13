@@ -1,0 +1,3 @@
+[submodule "src/content"]
+	path = src/content
+	url = https://github.com/Jing0924/daily-learning-log
