@@ -22,19 +22,41 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh-TW" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html
+      lang="zh-TW"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">
-        <header className="border-b border-zinc-200 dark:border-zinc-800">
+        <header className="sticky top-0 z-10 border-b border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-950/0 backdrop-blur-sm">
           <nav className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-            <Link href="/" className="font-semibold text-lg">Jing's Blog</Link>
+            <Link href="/" className="font-semibold text-lg">
+              Jing's Blog
+            </Link>
             <div className="flex gap-6 text-sm text-zinc-500">
-              <Link href="/drafts" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+              <Link
+                href="/posts"
+                className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+              >
+                文章
+              </Link>
+              <Link
+                href="/drafts"
+                className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+              >
                 學習日誌
               </Link>
+              <a
+                href="https://golden-queijadas-9fa6d6.netlify.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+              >
+                個人網站
+              </a>
             </div>
           </nav>
         </header>
-        <main className="flex-1">{children}</main>
+        <div className="flex-1">{children}</div>
       </body>
     </html>
   );

@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { getAllDrafts } from "@/lib/posts";
-
+import { getAllDrafts, getAllPosts } from "@/lib/posts";
 
 export default function Home() {
-  const recentDrafts = getAllDrafts().slice(0, 5);
+  const recentPosts = getAllPosts().slice(0, 5);
+  const recentDrafts = getAllDrafts().slice(0, 20);
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-20">
@@ -26,6 +26,40 @@ export default function Home() {
           </a>
         </div>
       </section>
+
+      {/* 最新文章 */}
+      {recentPosts.length > 0 && (
+        <section className="mb-16">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold">最新文章</h2>
+            <Link
+              href="/posts"
+              className="text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+            >
+              查看全部 →
+            </Link>
+          </div>
+          <ul className="flex flex-col gap-4">
+            {recentPosts.map((post) => (
+              <li key={`${post.date}-${post.slug}`}>
+                <Link href={`/posts/${post.date}/${post.slug}`} className="group block">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {post.title ?? post.slug}
+                      </h3>
+                      {post.description && (
+                        <p className="text-sm text-zinc-500 mt-1">{post.description}</p>
+                      )}
+                    </div>
+                    <time className="text-sm text-zinc-400 shrink-0">{post.date}</time>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* 最新學習日誌 */}
       <section>

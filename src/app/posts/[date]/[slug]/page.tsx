@@ -2,13 +2,13 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import Link from "next/link";
-import { getDraft, getAllDrafts } from "@/lib/posts";
+import { getPost, getAllPosts } from "@/lib/posts";
 import TagPill from "@/component/TagPill";
 import type { Metadata } from "next";
 
 export async function generateStaticParams() {
-  const drafts = getAllDrafts();
-  return drafts.map((d) => ({ date: d.date, slug: d.slug }));
+  const posts = getAllPosts();
+  return posts.map((p) => ({ date: p.date, slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -17,10 +17,10 @@ export async function generateMetadata({
   params: Promise<{ date: string; slug: string }>;
 }): Promise<Metadata> {
   const { date, slug } = await params;
-  const { data } = getDraft(date, slug);
+  const { data } = getPost(date, slug);
   return {
     title: data.title ? `${data.title} | Jing's Blog` : "Jing's Blog",
-    description: data.description ?? "記錄學習歷程與技術筆記",
+    description: data.description ?? "精煉後的正式文章與深度分析",
     openGraph: {
       title: data.title ?? slug,
       description: data.description ?? "",
@@ -32,21 +32,21 @@ export async function generateMetadata({
 
 export const dynamicParams = false;
 
-export default async function DraftPage({
+export default async function PostPage({
   params,
 }: {
   params: Promise<{ date: string; slug: string }>;
 }) {
   const { date, slug } = await params;
-  const { data, content } = getDraft(date, slug);
+  const { data, content } = getPost(date, slug);
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-16">
       <Link
-        href="/drafts"
+        href="/posts"
         className="text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 mb-8 inline-block transition-colors"
       >
-        ← 返回學習日誌
+        ← 返回文章
       </Link>
       <div className="mb-10">
         <time className="text-sm text-zinc-400">{data.date}</time>
@@ -57,7 +57,7 @@ export default async function DraftPage({
         {data.tags && (
           <div className="flex gap-2 mt-3 flex-wrap">
             {(data.tags as string[]).map((tag: string) => (
-              <TagPill key={tag} tag={tag} href={`/drafts?tag=${tag}`} />
+              <TagPill key={tag} tag={tag} href={`/posts?tag=${tag}`} />
             ))}
           </div>
         )}
