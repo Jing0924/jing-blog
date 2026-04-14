@@ -17,7 +17,7 @@ export default function Home() {
         </p>
         <div className="flex gap-4 mt-6">
           <a
-            href="https://github.com/你的帳號"
+            href="https://github.com/Jing0924"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
