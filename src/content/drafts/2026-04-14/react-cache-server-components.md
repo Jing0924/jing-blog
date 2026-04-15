@@ -10,6 +10,7 @@ tags: [Next.js, React, Performance, Server Components]
 `getAllDrafts()` 是一個普通函式，會讀取硬碟上所有的 `.md` 檔案：
 
 ```ts
+// src/lib/posts.ts
 export function getAllDrafts(): DraftMeta[] {
   const dateFolders = fs.readdirSync(draftsDir);
   for (const date of dateFolders) {
@@ -31,6 +32,7 @@ export function getAllDrafts(): DraftMeta[] {
 React 提供了 [`cache()`](https://react.dev/reference/react/cache)，可以讓同一個 request / render cycle 內對同一函式的重複呼叫共用同一份結果。
 
 ```ts
+// src/lib/posts.ts
 import { cache } from "react";
 
 // 修改前
@@ -46,7 +48,7 @@ export const getAllDrafts = cache(function getAllDrafts(): DraftMeta[] { ... });
 
 `cache()` 會以**函式的參數**作為 key，在同一個 request 內將結果記憶起來：
 
-```
+```text
 第一次呼叫 getAllDrafts()  →  讀檔、計算、儲存結果
 第二次呼叫 getAllDrafts()  →  直接回傳上次的結果（不讀檔）
 第三次呼叫 getAllDrafts()  →  同上
