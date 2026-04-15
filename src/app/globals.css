@@ -26,6 +26,19 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans)}
 
+/*
+ Light mode: prose-zinc sets pre to a dark panel (--tw-prose-pre-*), while
+  highlight.js GitHub Light expects a white block. Align the pre wrapper with
+  .hljs so the panel and tokens share one visual system.
+*/
+@media (prefers-color-scheme: light) {
+  article.prose pre:has(> code.hljs) {
+    background-color: #ffffff;
+    color: #24292e;
+    border: 1px solid #e1e4e8;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   pre code.hljs {
     display: block;

@@ -23,21 +23,21 @@ export interface PostMeta extends Frontmatter {
   slug: string;
 }
 
-export function getDraft(date: string, slug: string) {
+export const getDraft = cache(function getDraft(date: string, slug: string) {
   const filePath = path.join(draftsDir, date, `${slug}.md`);
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
   if (data.date) data.date = String(data.date).split("T")[0];
-  return { data, content };
-}
+  return { data: data as Frontmatter, content };
+});
 
-export function getPost(date: string, slug: string) {
+export const getPost = cache(function getPost(date: string, slug: string) {
   const filePath = path.join(postsDir, date, `${slug}.md`);
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
   if (data.date) data.date = String(data.date).split("T")[0];
-  return { data, content };
-}
+  return { data: data as Frontmatter, content };
+});
 
 export const getAllPosts = cache(function getAllPosts(): PostMeta[] {
   if (!fs.existsSync(postsDir)) return [];
@@ -61,6 +61,7 @@ export const getAllPosts = cache(function getAllPosts(): PostMeta[] {
 });
 
 export const getAllDrafts = cache(function getAllDrafts(): DraftMeta[] {
+  if (!fs.existsSync(draftsDir)) return [];
   const results: DraftMeta[] = [];
   const dateFolders = fs.readdirSync(draftsDir);
   for (const date of dateFolders) {

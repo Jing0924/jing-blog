@@ -1,6 +1,11 @@
-import Link from "next/link";
 import { getAllDrafts } from "@/lib/posts";
-import TagPill from "@/component/TagPill";
+import PostCard from "@/components/PostCard";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "學習日誌",
+  description: "隨手記錄的學習筆記",
+};
 
 export default async function DraftsPage({
   searchParams,
@@ -15,42 +20,32 @@ export default async function DraftsPage({
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-16">
-      <h1 className="text-3xl font-bold mb-2">學習日誌</h1>
-      <p className="text-zinc-500 mb-10">隨手記錄的學習筆記</p>
+      <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">學習日誌</h1>
+      <p className="text-zinc-500 dark:text-zinc-400 mb-10">隨手記錄的學習筆記</p>
+      {tag && (
+        <p className="text-sm text-zinc-400 mb-6">
+          篩選標籤：<span className="text-purple-600 dark:text-purple-300 font-medium">{tag}</span>
+        </p>
+      )}
       <ul className="flex flex-col gap-6">
         {drafts.map((draft) => (
           <li key={`${draft.date}-${draft.slug}`}>
-            <article className="border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors">
-              <Link
-                href={`/drafts/${draft.date}/${draft.slug}`}
-                className="group block"
-              >
-                <time className="text-sm text-zinc-400">{draft.date}</time>
-                <h2 className="text-xl font-semibold mt-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {draft.title ?? draft.slug}
-                </h2>
-                {draft.description && (
-                  <p className="text-zinc-500 mt-2 text-sm">
-                    {draft.description}
-                  </p>
-                )}
-              </Link>
-
-              {draft.tags && (
-                <div className="flex gap-2 mt-3 flex-wrap">
-                  {draft.tags.map((t) => (
-                    <TagPill
-                      key={t}
-                      tag={t}
-                      href={tag === t ? "/drafts" : `/drafts?tag=${t}`}
-                    />
-                  ))}
-                </div>
-              )}
-            </article>
+            <PostCard
+              title={draft.title}
+              description={draft.description}
+              date={draft.date}
+              slug={draft.slug}
+              tags={draft.tags}
+              href={`/drafts/${draft.date}/${draft.slug}`}
+              activeTag={tag}
+              tagHrefPrefix="/drafts"
+            />
           </li>
         ))}
       </ul>
+      {drafts.length === 0 && (
+        <p className="text-zinc-400 dark:text-zinc-500 text-sm">沒有符合的日誌。</p>
+      )}
     </main>
   );
 }
