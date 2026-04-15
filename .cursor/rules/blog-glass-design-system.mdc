@@ -1,0 +1,200 @@
+---
+description: 本專案 Glassmorphism 設計規格書 — 定義完整配色系統、核心 token、三層結構與三種卡片變體
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# Blog Glass Design System
+
+> 通用規範請參閱 `nextjs-tailwind-glassmorphism.mdc`；本文件記錄**本專案實際使用的**具體設計規格。
+
+---
+
+## 完整配色系統
+
+### 頁面底色（globals.css）
+
+| 模式 | 背景 | 前景 |
+|------|------|------|
+| 亮色 | `#ffffff` (`--background`) | `#171717` (`--foreground`) |
+| 暗色 | `#0a0a0a` | `#ededed` |
+
+### 文字階層
+
+| 層級 | 亮色 | 暗色 |
+|------|------|------|
+| 主標題（h1/h2） | `text-zinc-800` / `text-zinc-900` | `dark:text-zinc-100` / `dark:text-zinc-50` |
+| 內文 / 描述 | `text-zinc-500` | `dark:text-zinc-400` |
+| 輔助 / 日期 | `text-zinc-400` | `dark:text-zinc-400` / `dark:text-zinc-500` |
+
+### 強調色（Accent）— 依頁面區分
+
+| 情境 | 亮色 | 暗色 |
+|------|------|------|
+| Hero h1 三色漸層 | `from-indigo-600 via-purple-600 to-pink-600` | `dark:from-indigo-300 dark:via-purple-300 dark:to-pink-300` |
+| Header logo / 文章頁標題 | `from-indigo-600 to-purple-600` | `dark:from-indigo-400 dark:to-purple-400` |
+| 學習日誌頁標題 | `from-purple-600 to-pink-600` | `dark:from-purple-400 dark:to-pink-400` |
+
+> 漸層文字需搭配 `bg-gradient-to-r bg-clip-text text-transparent`
+
+### 互動連結色
+
+| 情境 | 靜止 | Hover |
+|------|------|-------|
+| 文章區（Posts）連結 | `text-indigo-500 dark:text-indigo-400` | `hover:text-indigo-700 dark:hover:text-indigo-300` |
+| 學習日誌區（Drafts）連結 | `text-purple-500 dark:text-purple-400` | `hover:text-purple-700 dark:hover:text-purple-300` |
+| TagPill 文字 | `text-indigo-600 dark:text-indigo-300` | — |
+| 卡片標題 hover（文章） | — | `group-hover:text-indigo-600 dark:group-hover:text-indigo-400` |
+| 卡片標題 hover（日誌） | — | `group-hover:text-purple-600 dark:group-hover:text-purple-400` |
+| 日期 metadata | `text-indigo-400` | — |
+| Nav 連結 | `text-zinc-500 dark:text-zinc-400` | `hover:text-indigo-600 dark:hover:text-indigo-400` |
+| 標籤篩選提示（文章） | `text-indigo-600 dark:text-indigo-300` | — |
+| 標籤篩選提示（日誌） | `text-purple-600 dark:text-purple-300` | — |
+
+### 程式碼區塊配色
+
+**亮色模式**（highlight.js GitHub Light）
+
+| 用途 | 值 |
+|------|----|
+| 背景 | `#ffffff` |
+| 文字 | `#24292e` |
+| 邊框 | `#e1e4e8` |
+
+**暗色模式**（GitHub Dark）
+
+| Token 類型 | 顏色 |
+|------------|------|
+| 基底文字 | `#c9d1d9`，背景 `#0d1117` |
+| 關鍵字 | `#ff7b72` |
+| 函數 / 類別名 | `#d2a8ff` |
+| 屬性 / 數字 / 運算子 | `#79c0ff` |
+| 字串 | `#a5d6ff` |
+| 內建 / 符號 | `#ffa657` |
+| 註解 | `#8b949e` |
+| 標籤名 | `#7ee787` |
+| 章節標題 | `#1f6feb` |
+| 列表符號 | `#f2cc60` |
+| diff 新增 | `#aff5b4` 背景 `#033a16` |
+| diff 刪除 | `#ffdcd7` 背景 `#67060c` |
+
+---
+
+## 核心 Token
+
+### 背景
+
+| 用途 | 亮色 | 暗色 |
+|------|------|------|
+| Full Card | `bg-white/40` | `dark:bg-white/5` |
+| Compact Row / Pill | `bg-white/30` | `dark:bg-white/5` |
+| Header | `bg-white/30` | `dark:bg-black/30` |
+| Pill（TagPill）| `bg-white/40` | `dark:bg-white/10` |
+
+### 邊框
+
+- 一般：`border border-white/30 dark:border-white/10`
+- Compact Row：`border border-white/20 dark:border-white/10`
+
+### 模糊
+
+- Full Card：`backdrop-blur-2xl`
+- Compact Row / Pill / Header：`backdrop-blur-md`
+
+### 陰影
+
+| 元素 | 靜止 | Hover |
+|------|------|-------|
+| Full Card | `shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]` | `shadow-[0_16px_48px_0_rgba(31,38,135,0.5)]` |
+| Compact Row | `shadow-[0_4px_16px_0_rgba(31,38,135,0.15)]` | `shadow-[0_8px_24px_0_rgba(31,38,135,0.25)]` |
+| Pill | `shadow-[0_2px_8px_0_rgba(31,38,135,0.15)]` | `shadow-[0_4px_12px_0_rgba(31,38,135,0.25)]` |
+
+### 內發光環
+
+```
+ring-1 ring-inset ring-white/30 dark:ring-white/10
+```
+
+Compact Row 略輕：`ring-white/25 dark:ring-white/10`
+
+### 噪訊層（磨砂感）
+
+```
+absolute inset-0 opacity-[0.03] pointer-events-none
+bg-[url('/noise.svg')] bg-repeat bg-[length:256px_256px]
+```
+
+> 使用 `.svg`，不是 `.png`
+
+### 強調色漸層
+
+- 文字（Hero h1）：`from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-300 dark:via-purple-300 dark:to-pink-300`
+- 背景 overlay：`from-indigo-500/10 via-purple-500/5 to-pink-500/10`
+
+---
+
+## 三層結構（所有玻璃容器必備）
+
+```
+1. [選用] 漸層 overlay  — absolute inset-0 bg-gradient-to-br from-indigo-500/10 ...
+2. 內發光環            — absolute inset-0 rounded-{size} ring-1 ring-inset ring-white/30 ...
+3. 噪訊磨砂層          — absolute inset-0 opacity-[0.03] bg-[url('/noise.svg')] ...
+4. 內容層              — relative z-10
+```
+
+> 容器本身必須有 `relative overflow-hidden`
+
+---
+
+## 三種卡片變體
+
+### Full Card（PostCard、PostArticle、Hero）
+
+```tsx
+<article className="relative overflow-hidden rounded-2xl border border-white/30 dark:border-white/10
+  bg-white/40 dark:bg-white/5 p-6
+  shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] backdrop-blur-2xl
+  transition-all duration-300
+  hover:bg-white/50 dark:hover:bg-white/10
+  hover:shadow-[0_16px_48px_0_rgba(31,38,135,0.5)] hover:-translate-y-0.5">
+  <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/30 dark:ring-white/10 pointer-events-none" />
+  <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/noise.svg')] bg-repeat bg-[length:256px_256px]" />
+  <div className="relative z-10">{/* 內容 */}</div>
+</article>
+```
+
+### Compact Row（首頁文章列表）
+
+```tsx
+<Link className="group block rounded-xl border border-white/20 dark:border-white/10
+  bg-white/30 dark:bg-white/5 px-5 py-4
+  shadow-[0_4px_16px_0_rgba(31,38,135,0.15)] backdrop-blur-md
+  ring-1 ring-inset ring-white/25 dark:ring-white/10
+  hover:bg-white/50 dark:hover:bg-white/10
+  hover:shadow-[0_8px_24px_0_rgba(31,38,135,0.25)]
+  transition-all duration-300">
+```
+
+### Pill（TagPill、GitHub 按鈕）
+
+```tsx
+<Link className="rounded-full border border-white/30 dark:border-white/10
+  bg-white/40 dark:bg-white/10
+  px-3 py-0.5 backdrop-blur-md
+  ring-1 ring-inset ring-white/30 dark:ring-white/10
+  shadow-[0_2px_8px_0_rgba(31,38,135,0.15)]
+  hover:bg-white/60 dark:hover:bg-white/20
+  hover:shadow-[0_4px_12px_0_rgba(31,38,135,0.25)]
+  transition-all duration-300">
+```
+
+---
+
+## Header（sticky nav）
+
+```tsx
+<header className="sticky top-0 z-10 border-b border-white/20 dark:border-white/10
+  bg-white/30 dark:bg-black/30 backdrop-blur-2xl
+  shadow-[0_8px_32px_0_rgba(31,38,135,0.12)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]
+  ring-1 ring-inset ring-white/30 dark:ring-white/10">
+```

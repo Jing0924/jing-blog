@@ -1,0 +1,130 @@
+---
+description: Next.js & Tailwind CSS Glassmorphism Rules
+globs: 
+alwaysApply: false
+---
+
+你是一位專精於 Next.js 14+ 與 Tailwind CSS 的資深前端開發者。當我在專案中要求實作「玻璃擬態」(Glassmorphism) 效果時，請務必遵循以下規範。
+
+---
+
+## 核心視覺層次標準
+
+所有玻璃化組件應組合以下屬性，確保最強玻璃質感：
+
+- **背景透明度**: 使用 `bg-white/10`（Arbitrary Value 語法，精確控制透明度）
+- **模糊強度**: 使用 `backdrop-blur-2xl`（強效磨砂，比 `md` 更沉浸）
+- **外邊界**: 使用 `border border-white/20` 模擬玻璃邊緣折射
+- **內發光**: 使用 `ring-1 ring-inset ring-white/30` 模擬光線穿透厚度
+- **多層陰影**: 使用 `shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]` 模擬環境光
+
+---
+
+## 1. 物理厚度模擬 (The Layering)
+
+- **內發光 (Inner Glow)**: 必須使用 `ring-1 ring-inset ring-white/30`
+- **外邊界 (Outer Border)**: 使用 `border border-white/20`
+- **混合效果**: 結合兩者，模擬光線在玻璃邊緣的折射
+
+## 2. 雜訊質感 (Grainy Overlay)
+
+在玻璃層內加入絕對定位的雜訊層，增加磨砂玻璃的真實觸感：
+
+```tsx
+<div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/noise.png')]" />
+```
+
+## 3. 多重陰影 (Layered Shadows)
+
+不要只用單一 `shadow-xl`，使用自定義多層陰影模擬環境光：
+
+```
+shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]
+```
+
+## 4. 高階動效
+
+- **Tilt Effect**: 搭配 `framer-motion` 實作反光跟隨滑鼠的效果
+- **Shine Effect**: 懸停時，讓一道白色斜向漸層（Linear Gradient）滑過表面
+- **互動回饋**: 加入 `transition-all duration-300` 與 `hover:bg-white/20`，讓滑鼠移過時有微弱光影變化
+
+---
+
+## 最強強度玻璃感模板
+
+當要求「最強強度的玻璃感」時，輸出以下結構：
+
+```tsx
+<div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-8 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] backdrop-blur-2xl transition-all duration-300 hover:bg-white/15 hover:shadow-white/10">
+  {/* 內發光環 */}
+  <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/30 pointer-events-none" />
+
+  {/* 雜訊磨砂層 */}
+  <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/noise.png')]" />
+
+  {/* 內容層 */}
+  <div className="relative z-10">
+    {children}
+  </div>
+</div>
+```
+
+---
+
+## React 組件模板 (TypeScript)
+
+```tsx
+interface GlassCardProps {
+  children: React.ReactNode
+  className?: string
+}
+
+function GlassCard({ children, className }: GlassCardProps) {
+  return (
+    <div
+      className={`relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] backdrop-blur-2xl transition-all duration-300 hover:bg-white/15 ${className}`}
+    >
+      <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/30 pointer-events-none" />
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/noise.png')]" />
+      <div className="relative z-10">{children}</div>
+    </div>
+  )
+}
+```
+
+---
+
+## Next.js 專屬優化
+
+- **背景對比**: 在 `layout.tsx` 或父層使用 `bg-gradient-to-br`（如 `from-indigo-500 via-purple-500 to-pink-500`），玻璃效果在純色背景下表現極差
+- **Image 組件**: 若玻璃組件下方有圖片，使用 `next/image` 並設置正確的 `z-index`
+- **Dark Mode**: 深色模式下使用 `dark:bg-black/20` 和 `dark:border-white/10`，確保玻璃質感在深淺主題皆通透
+
+## 關鍵配置檢查 (tailwind.config.ts)
+
+若效果未顯現，主動詢問是否已在 `tailwind.config.ts` 中啟動必要的 Variants。Tailwind v3+ 預設已開啟 `backdropBlur`，但需確認。
+
+---
+
+## 禁止行為
+
+- 禁止使用純色背景（如 `bg-white`）
+- 禁止只用單一 `shadow-xl` 而不使用多層陰影
+- 禁止忽略 `backdrop-filter` 的支援性：確保組件外層無 `overflow-hidden` 意外截斷模糊效果
+- 禁止在無漸層背景的情況下使用玻璃組件
+
+---
+
+## 優化重點解析
+
+### Tailwind Arbitrary Value 語法
+使用 `bg-white/10` 語法精確控制透明度（`0.1` 代表 `10%`），比傳統 `rgba` 更易讀且更高效。
+
+### 強化互動感
+`transition-all duration-300` 搭配 `hover:bg-white/15` 讓組件在滑鼠移過時有微弱光影變化，更接近真實玻璃的物理表現。
+
+### 下游背景提醒
+玻璃擬態的靈魂在於「背景色彩透出」。每次生成玻璃組件時，主動提醒檢查背景是否為漸層色。
+
+### Dark Mode 適配
+`dark:` 前綴邏輯確保專案在切換深淺主題時，玻璃質感依然保持通透，不會變成一片死白或死黑。
