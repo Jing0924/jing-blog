@@ -1,13 +1,11 @@
 ---
 title: Next.js 專案設定並部署至Vercel
 date: 2026-04-13
-description: 學習如何設定集部署 Next.js 專案
+description: 學習如何設定並部署 Next.js 專案至 Vercel，包含常見的 npm 命名限制踩坑。
 tags: [Next.js]
 ---
 
-（原本的內容繼續往下）
-
-# 建立 Next.js 專案
+用 `create-next-app` 建立專案並部署至 Vercel，過程遇到 npm 命名限制。
 
 ## 建立指令
 
@@ -29,7 +27,7 @@ npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --
 
 **錯誤訊息：**
 
-```
+```text
 Could not create a project called "Jing-Tech-Blog" because of npm naming restrictions:
   * name can no longer contain capital letters
 ```
@@ -54,3 +52,11 @@ Could not create a project called "Jing-Tech-Blog" because of npm naming restric
 6. 點擊 **"Deploy"** — 等待幾分鐘即可完成
 
 部署完成後，Vercel 會提供一個 `xxx.vercel.app` 的網址。
+
+## 重點整理
+
+| 步驟 | 核心機制 |
+|---|---|
+| `create-next-app` | 一行指令建立含 TS、Tailwind、App Router 的專案 |
+| npm 命名限制 | 套件名稱不允許大寫，需全小寫加 `-` |
+| Vercel 部署 | 連結 GitHub repo，自動偵測 Next.js 並部署 |

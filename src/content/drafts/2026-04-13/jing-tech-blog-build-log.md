@@ -26,7 +26,7 @@ npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --
 
 **錯誤訊息：**
 
-```
+```text
 Could not create a project called "Jing-Tech-Blog" because of npm naming restrictions:
   * name can no longer contain capital letters
 ```
@@ -65,7 +65,7 @@ git submodule add https://github.com/Jing0924/daily-learning-log src/content
 
 ### 筆記的目錄結構
 
-```
+```text
 src/content/
 ├── posts/         ← 正式文章（.md）
 └── drafts/
@@ -131,6 +131,7 @@ npm install react-markdown rehype-highlight highlight.js
 ### `next.config.ts`
 
 ```ts
+// next.config.ts
 import createMDX from '@next/mdx'
 
 const nextConfig = {
@@ -149,6 +150,7 @@ export default withMDX(nextConfig)
 ### `mdx-components.tsx`（根目錄，Next.js MDX 必要）
 
 ```tsx
+// mdx-components.tsx
 import type { MDXComponents } from 'mdx/types'
 
 export function useMDXComponents(): MDXComponents {
@@ -159,6 +161,7 @@ export function useMDXComponents(): MDXComponents {
 ### `src/app/globals.css`
 
 ```css
+/* src/app/globals.css */
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
@@ -180,6 +183,7 @@ export function useMDXComponents(): MDXComponents {
 ## 六、文章讀取工具函式 `src/lib/posts.ts`
 
 ```ts
+// src/lib/posts.ts
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
